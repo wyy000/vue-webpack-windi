@@ -8,14 +8,13 @@ export default function getLevelRef (): Array<RouteRecordRaw> {
     const matches = /^\.\/(.*)\/(.*)\.vue/g.exec(it)
     if (matches) {
       const item = level.find(item => item.name === `${matches[1]}-Index`)
-      if (matches[2] === 'index') return
       if (item) {
+        if (matches[2] === 'Index') return
         item.children!.push({
           name: matches[2],
           path: matches[2].toLowerCase(),
           component: () => import(`@/views/${matches[1]}/${matches[2]}`)
         })
-        console.log(`@/views/${matches[1]}/${matches[2]}.vue`)
       }
       else {
         level.push({
