@@ -1,3 +1,5 @@
+export * from './dom'
+
 export function randomColor(): string {
   const str = Array.from({length: 10}).map((it, idx) => String(idx)).concat(['a', 'b', 'c', 'd', 'e', 'f'])
   const range = parseInt((73 + Math.random() * (246 - 73)).toString())
