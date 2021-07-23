@@ -9,7 +9,7 @@ function getId (): string {
 
 export function addClickAway (fn: () => void): string {
   const _id = getId()
-  clickFnMap.set(getId(), fn)
+  clickFnMap.set(_id, fn)
   return _id
 }
 

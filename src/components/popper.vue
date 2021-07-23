@@ -1,10 +1,11 @@
 <template lang="pug">
-div(@click.stop="")
-  slot(v-if="show")
+// 如果不定义ref, 无法获取解析的dom, 只能获取配置对象
+div(@click.stop="" ref="el")
+  slot
 </template>
 
 <script>
-import {defineComponent, onBeforeUnmount, watch} from 'vue'
+import {defineComponent, nextTick, onBeforeUnmount, reactive, toRefs, watch} from 'vue'
 import {createPopper} from '@popperjs/core'
 import {addClickAway, removeClickAway} from '@/utils'
 
@@ -13,10 +14,6 @@ export default defineComponent({
 
   props: {
     targetEl: {
-      type: HTMLElement,
-      required: true,
-    },
-    el: {
       type: HTMLElement,
       required: true,
     },
@@ -42,19 +39,36 @@ export default defineComponent({
       ],
     }
 
-    watch(() => props.show, (value) => {
-      if (value && props.el && props.targetEl) {
-        createPopper(props.targetEl, props.el, Object.assign(baseOptions, props.options))
+    const state = reactive({
+      el: null,
+    })
+
+    let popper
+    let _id = addClickAway(async (e) => {
+      e.target !== props.targetEl && emit('update:show', false)
+    })
+
+    watch(() => props.show, async (value) => {
+      if (value) {
+        await nextTick()
+        popper = createPopper(props.targetEl, state.el, Object.assign(baseOptions, props.options))
       }
+      else {
+        removeClickAway(_id)
+        popper && popper.destroy()
+        popper = undefined
+      }
+    }, {immediate: true})
+
+    onBeforeUnmount(() => {
+      removeClickAway(_id)
+      popper && popper.destroy()
+      popper = undefined
     })
 
-    let _id = addClickAway(e => {
-      if (e.target !== props.targetEl) emit('update:show', false)
-    })
-
-    onBeforeUnmount(() => removeClickAway(_id))
-
-    return {}
+    return {
+      ...toRefs(state),
+    }
   },
 })
 </script>

@@ -10,23 +10,26 @@ div(v-show="!expanded" class="absolute top-1 left-1/2 transform -translate-x-1/2
     path(d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" fill="currentColor")
 header
   div(class="h-10 bg-[#24292e]")
-router-view
+app-model
+
 </template>
 
 <script>
 import {reactive, toRefs} from 'vue'
 import {level} from '@/views/index.ts'
 import {randomColor} from '@/utils'
+import AppModel from '@/components/app-model.vue'
 import TagButton from '@/components/tag-button.vue'
 
 export default {
   components: {
+    AppModel,
     TagButton,
   },
 
   setup () {
     const state = reactive({
-      expanded: true,
+      expanded: false,
     })
     level.forEach(it => it.style = {'border-color': randomColor()})
 
