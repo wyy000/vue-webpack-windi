@@ -11,7 +11,6 @@ div(v-show="!expanded" class="absolute top-1 left-1/2 transform -translate-x-1/2
 header
   div(class="h-10 bg-[#24292e]")
 app-model
-
 </template>
 
 <script>

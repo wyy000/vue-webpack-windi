@@ -54,17 +54,17 @@ export default defineComponent({
         popper = createPopper(props.targetEl, state.el, Object.assign(baseOptions, props.options))
       }
       else {
-        removeClickAway(_id)
-        popper && popper.destroy()
-        popper = undefined
+        closePopper()
       }
     }, {immediate: true})
 
-    onBeforeUnmount(() => {
+    onBeforeUnmount(() => closePopper())
+
+    function closePopper () {
       removeClickAway(_id)
       popper && popper.destroy()
       popper = undefined
-    })
+    }
 
     return {
       ...toRefs(state),

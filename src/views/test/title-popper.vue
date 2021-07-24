@@ -27,15 +27,10 @@ export default defineComponent({
   setup (props, {emit}) {
     const show = ref(true)
 
-    watch(() => show, value => {
-      console.log(123, show, !value)
-      !value && emit('update')
-    }, {immediate: true})
+    // ref监听.value
+    watch(() => show.value, value => !value && emit('update'), {immediate: true})
 
-    onBeforeUnmount(() => {
-      console.log('onBeforeUnmount')
-      emit('update')
-    })
+    onBeforeUnmount(() => emit('update'))
 
     return {
       show,
