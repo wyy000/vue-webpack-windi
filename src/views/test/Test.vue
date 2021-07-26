@@ -2,7 +2,9 @@
 h1 test
 button(@click="handle") click trigger popper
 a-popper(v-model:visible="visible" :targetEl="targetEl")
-  h2 world
+  h2(@click="clickHandle") hello
+a-popper(v-model:visible="show" :targetEl="targetElH2")
+  h3 world
 </template>
 
 <script>
@@ -17,8 +19,10 @@ export default {
   setup (props) {
     const state = reactive({
       visible: false,
+      show: false,
       targetEl: null,
       el: null,
+      targetElH2: null,
     })
 
     function handle (el) {
@@ -26,9 +30,15 @@ export default {
       state.visible = !state.visible
     }
 
+    function clickHandle (el) {
+      state.targetElH2 = el.target
+      state.show = !state.show
+    }
+
     return {
       ...toRefs(state),
       handle,
+      clickHandle,
     }
   },
 }
