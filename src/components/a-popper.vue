@@ -49,9 +49,7 @@ export default {
       if (value) {
         await nextTick()
         createPopper(props.targetEl, state.comp, Object.assign(baseOptions, props.options))
-        _id = addClickAway(async (e) => {
-          e.target !== props.targetEl && emit('update:visible', false)
-        })
+        _id = addClickAway(e => e.target !== props.targetEl && emit('update:visible', false), state.comp)
       }
       else {
         removeClickAway(_id)

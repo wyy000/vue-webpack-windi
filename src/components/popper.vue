@@ -44,9 +44,7 @@ export default defineComponent({
     })
 
     let popper
-    let _id = addClickAway(async (e) => {
-      e.target !== props.targetEl && emit('update:show', false)
-    })
+    let _id = addClickAway(e => e.target !== props.targetEl && emit('update:show', false), state.el)
 
     watch(() => props.show, async (value) => {
       if (value) {
