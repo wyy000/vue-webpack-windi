@@ -20,6 +20,6 @@ export function removeClickAway (id: string): boolean {
 if (!registered) {
   registered = true
   document.addEventListener('click', function (e) {
-    clickFnMap.forEach(it => it?.(e))
+    clickFnMap.size && clickFnMap.forEach(it => it?.(e))
   })
 }

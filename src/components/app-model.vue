@@ -1,7 +1,7 @@
 <template lang="pug">
 router-view
-div(v-if="currentComp" class="fixed z-[2] bottom-0 inset-x-0 h-0 flex justify-center items-end")
-  component(:is="globalModel[currentComp].component" v-bind="globalModel[currentComp].props" v-on="globalModel[currentComp].listeners")
+div(class="fixed z-[2] bottom-0 inset-x-0 h-0 flex justify-center items-end" id="appModel")
+  component(v-if="currentComp" :is="globalModel[currentComp].component" v-bind="globalModel[currentComp].props" v-on="globalModel[currentComp].listeners")
 </template>
 
 <script>
