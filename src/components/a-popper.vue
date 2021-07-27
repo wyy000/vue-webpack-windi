@@ -1,6 +1,6 @@
 <template lang="pug">
 teleport(v-if="visible" to="#appModel")
-  div(ref="comp" @click.stop="")
+  div(ref="comp")
     slot
 </template>
 
@@ -33,7 +33,7 @@ export default {
         {
           name: 'offset',
           options: {
-            offset: [10, 20],
+            offset: [],
           },
         },
       ],
