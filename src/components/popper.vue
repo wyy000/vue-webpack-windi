@@ -1,6 +1,6 @@
 <template lang="pug">
 // 如果不定义ref, 无法获取解析的dom, 只能获取配置对象
-div(@click.stop="" ref="el")
+div(ref="el")
   slot
 </template>
 
