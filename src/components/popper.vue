@@ -5,7 +5,7 @@ div(ref="el")
 </template>
 
 <script>
-import {defineComponent, nextTick, onBeforeUnmount, reactive, toRefs, watch} from 'vue'
+import {defineComponent, nextTick, onBeforeUnmount, onMounted, reactive, toRefs, watch} from 'vue'
 import {createPopper} from '@popperjs/core'
 import {addClickAway, removeClickAway} from '@/utils'
 
@@ -33,7 +33,7 @@ export default defineComponent({
         {
           name: 'offset',
           options: {
-            offset: [10, 20],
+            offset: [],
           },
         },
       ],
@@ -44,7 +44,11 @@ export default defineComponent({
     })
 
     let popper
-    let _id = addClickAway(e => e.target !== props.targetEl && emit('update:show', false), state.el)
+    let appModel
+
+    onMounted(() => appModel = document.getElementById('appModel'))
+
+    let _id = addClickAway(e => e.target !== props.targetEl && !appModel?.contains(e.target) && emit('update:show', false), state.el)
 
     watch(() => props.show, async (value) => {
       if (value) {
