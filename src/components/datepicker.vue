@@ -17,72 +17,50 @@ div(class="mx-auto w-70 flex flex-col divide-y")
     button(v-for="it of nextDays[0]" class="date-btn" @click="chooseDay(it, 1)") {{it}}
 </template>
 
-<script>
-import {computed, ref, watch} from 'vue'
+<script setup>
+import {computed, defineEmits, defineProps, ref, watch} from 'vue'
 import {addMonths, isEqual, getDate, getDay, startOfMonth, subDays} from 'date-fns'
-import {format} from '@/utils'
 
 const CELL_NUMS = 42
 
-export default {
-  emit: ['update'],
-
-  props: {
-    modelValue: {
-      type: Date,
-      default: () => (new Date()),
-    },
+const emit = defineEmits(['update'])
+const props = defineProps({
+  modelValue: {
+    type: Date,
+    default: () => (new Date()),
   },
+})
 
-  setup (props, {emit}) {
-    const week = ['日', '一', '二', '三', '四', '五', '六']
-    const days = [31, 28, 31, 30, 31, 30, 31, 30, 30, 31, 30, 31]
+const week = ['日', '一', '二', '三', '四', '五', '六']
+const days = [31, 28, 31, 30, 31, 30, 31, 30, 30, 31, 30, 31]
 
-    const viewDate = ref(props.modelValue ?? new Date())
-    const refYear = computed(() => viewDate.value.getFullYear())
-    const refMonth = computed(() => viewDate.value.getMonth())
+const viewDate = ref(props.modelValue ?? new Date())
+const refYear = computed(() => viewDate.value.getFullYear())
+const refMonth = computed(() => viewDate.value.getMonth())
 
-    const curDays = computed(() => [days[refMonth.value], isEqual(props.modelValue, viewDate.value) ? getDate(viewDate.value) : null])
-    const preDays = ref([0, 0])
-    const nextDays = ref([0, 1])
+const curDays = computed(() => [days[refMonth.value], isEqual(props.modelValue, viewDate.value) ? getDate(viewDate.value) : null])
+const preDays = ref([0, 0])
+const nextDays = ref([0, 1])
 
-    watch(() => props.modelValue, value => value && (viewDate.value = value), {immediate: true})
+watch(() => props.modelValue, value => value && (viewDate.value = value), {immediate: true})
 
-    watch(() => [refYear.value, refMonth.value], ([year, month]) => {
-      days[1] = month === 1 && (year % 4 === 0) && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28
-    }, {immediate: true})
+watch(() => [refYear.value, refMonth.value], ([year, month]) => {
+  days[1] = month === 1 && (year % 4 === 0) && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28
+}, {immediate: true})
 
-    watch(() => viewDate.value, value => {
-      const startMonth = startOfMonth(value)
-      preDays.value[0] = getDay(startMonth) % 7
-      preDays.value[1] = getDate(subDays(startMonth, preDays.value[0]))
-      nextDays.value[0] = CELL_NUMS - preDays.value[0] - curDays.value[0]
-    }, {immediate: true})
+watch(() => viewDate.value, value => {
+  const startMonth = startOfMonth(value)
+  preDays.value[0] = getDay(startMonth) % 7
+  preDays.value[1] = getDate(subDays(startMonth, preDays.value[0]))
+  nextDays.value[0] = CELL_NUMS - preDays.value[0] - curDays.value[0]
+}, {immediate: true})
 
-    async function chooseDay (day, month = 0) {
-      emit('update:modelValue', new Date(refYear.value, refMonth.value + month, day))
-    }
+async function chooseDay (day, month = 0) {
+  emit('update:modelValue', new Date(refYear.value, refMonth.value + month, day))
+}
 
-    function curDateOfMonthStyle (checked) {
-      return checked ? 'text-white border-fuchsia-600 bg-fuchsia-600' : 'bg-white text-blue-gray-900 hover:border-fuchsia-600 hover:text-fuchsia-600'
-    }
-
-    return {
-      week,
-      viewDate,
-      preDays,
-      curDays,
-      nextDays,
-      refYear,
-      refMonth,
-
-      curDateOfMonthStyle,
-      chooseDay,
-      format,
-
-      addMonths,
-    }
-  },
+function curDateOfMonthStyle (checked) {
+  return checked ? 'text-white border-fuchsia-600 bg-fuchsia-600' : 'bg-white text-blue-gray-900 hover:border-fuchsia-600 hover:text-fuchsia-600'
 }
 </script>
 
