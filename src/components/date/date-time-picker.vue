@@ -1,25 +1,21 @@
 <template lang="pug">
 div(class="mx-auto flex flex-col divide-y")
   div(class="flex")
-    date-precision(v-model:precision="status" :value="viewValue")
+    date-precision(v-model:precision="status" v-model:value="viewValue" :count="count" :origin-precision="precision")
     div
-      svg(viewBox="0 0 24 24" width="24" height="24" class="cursor-pointer fill-current hover:text-fuchsia-600" @click="viewDate = addMonths(viewDate, -1)")
+      svg(viewBox="0 0 24 24" width="24" height="24" class="cursor-pointer fill-current hover:text-fuchsia-600" @click="pageState--")
         path(d="M9 12l4-4v8z")
-      svg(viewBox="0 0 24 24" width="24" height="24" class="cursor-pointer fill-current hover:text-fuchsia-600" @click="viewDate = addMonths(viewDate, 1)")
+      svg(viewBox="0 0 24 24" width="24" height="24" class="cursor-pointer fill-current hover:text-fuchsia-600" @click="pageState++")
         path(d="M14 12l-4 4V8z")
-  date-container()
+  date-container
 </template>
 
 <script setup>
-import {defineComponent, defineProps, provide, reactive, toRefs} from 'vue'
+import {defineProps, provide, reactive, ref, toRefs} from 'vue'
 
 import DateContainer from '@/components/date/date-container.vue'
 import DatePrecision from '@/components/date/date-precision.vue'
-
-defineComponent({
-  DateContainer,
-  DatePrecision,
-})
+import {getMinutes, getSeconds} from "date-fns";
 
 const props = defineProps({
   modelValue: {
@@ -36,11 +32,25 @@ const props = defineProps({
 const state = reactive({
   status: props.precision,
   viewValue: props.modelValue ?? new Date(),
+  count: 0,
+  addCount,
 })
+const pageState = ref(0)
 
 provide('useDateState', state)
+provide('useTurnPageState', pageState)
 
-const {status, viewValue} = toRefs(state)
+const useMinutesState = ref(0)
+const useSecondsState = ref(0)
+
+provide('useMinutesState', useMinutesState)
+provide('useSecondsState', useSecondsState)
+
+function addCount () {
+  state.count += 1
+}
+
+const {status, viewValue, count} = toRefs(state)
 </script>
 
 <style scoped>

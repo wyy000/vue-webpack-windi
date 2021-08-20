@@ -1,15 +1,15 @@
 <template lang="pug">
-h1 month
+button(v-for="(_, i) of 16" class="flex-grow p-4 cursor-pointer" style="flex-basis: 25%;" @click="clickHandle(i)") {{i % 12 + 1}}月
 </template>
 
 <script setup>
-import {defineEmits, inject} from 'vue'
+import {inject, toRefs} from 'vue'
+import {setMonth} from 'date-fns'
 
-const emit = defineEmits(['update:modelValue'])
+const {viewValue, addCount} = toRefs(inject('useDateState'))
 
-const dateState = inject('useDateState')
+function clickHandle (month) {
+  viewValue.value = setMonth(viewValue.value, month)
+  addCount.value()
+}
 </script>
-
-<style scoped>
-
-</style>

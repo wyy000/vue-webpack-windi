@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  date-time-picker(v-model="value")
+  date-time-picker(v-model="value" precision="s")
 </template>
 
 <script>
