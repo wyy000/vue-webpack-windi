@@ -1,11 +1,16 @@
 <template lang="pug">
 button(v-for="it of week" class="flex-grow flex-shrink-0 p-4 cursor-pointer" style="flex-basis: 14%;") {{it}}
-button(v-for="(_, i) of 42" class="flex-grow flex-shrink-0 p-4 cursor-pointer" style="flex-basis: 14%;" @click="clickHandle(i)") {{getDate(addDays(refContent, i))}}
+button(
+  v-for="(_, i) of 42"
+  class="flex-grow flex-shrink-0 p-4 text-blue-gray-900 cursor-pointer border border-white hover:border-fuchsia-500 hover:text-fuchsia-500"
+  style="flex-basis: 14%;"
+  @click="clickHandle(i)"
+) {{getDate(addDays(refContent, i))}}
 </template>
 
 <script setup>
 import {computed, inject, toRefs, watch} from 'vue'
-import {addDays, getDate, getDay, getMonth, getYear, setDate, startOfMonth, subDays} from 'date-fns'
+import {addDays, getDate, getDay, getMonth, getYear, setDate, startOfMonth} from 'date-fns'
 
 const {viewValue, addCount} = toRefs(inject('useDateState'))
 

@@ -1,5 +1,5 @@
 <template lang="pug">
-div(class="w-100 h-80 flex flex-wrap")
+div(class="w-100 h-96 flex flex-wrap")
   table-year(v-if="status === 'Y'")
   table-month(v-if="status === 'M'")
   table-day(v-if="status === 'D'")

@@ -1,5 +1,5 @@
 <template lang="pug">
-button(v-for="(_, i) of CELL_NUM" class="flex-grow flex-shrink-0 p-4 cursor-pointer" style="flex-basis: 16%;" @click="clickHandle(refRange + i)") {{refRange + i}}
+button(v-for="(_, i) of CELL_NUM" :class="['flex-grow flex-shrink-0 p-4 cursor-pointer border border-white hover:border-fuchsia-500', {'text-fuchsia-500': getSeconds(viewValue) === refRange + i}]" style="flex-basis: 16%;" @click="clickHandle(refRange + i)") {{refRange + i}}
 </template>
 
 <script setup>

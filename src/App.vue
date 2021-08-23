@@ -70,4 +70,8 @@ body {
     }
   }
 }
+
+button {
+  @apply bg-white;
+}
 </style>

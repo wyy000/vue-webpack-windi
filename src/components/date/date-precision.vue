@@ -1,5 +1,8 @@
 <template lang="pug">
-button(@click="changeMode") {{refContent}}
+div(class="flex justify-between")
+  button(@click="changeMode(2)" class="cursor-pointer") {{refContent}}
+  button(v-if="STACK.findIndex(it => it[0] === originPrecision) >= 3" @click="changeMode(3)" class="cursor-pointer")
+    span(v-for="[str, status] of refTime" :class="[{'text-fuchsia-500': status === precision}]") {{str}}
 </template>
 
 <script>
@@ -33,22 +36,27 @@ export default {
       ['Y', '年', getYear, addYears],
       ['M', '月', getMonth, addMonths],
       ['D', '日', getDate, addDays],
-      ['h', '时', getHours, addHours],
-      ['m', '分', getMinutes, addMinutes],
-      ['s', '秒', getSeconds, addSeconds]
+      ['h', ':', getHours, addHours],
+      ['m', ':', getMinutes, addMinutes],
+      ['s', ' ', getSeconds, addSeconds]
     ]
 
     watch(() => props.count, value => {
-      const index = STACK.findIndex(it => it[0] === props.precision)
-      // TODO
-      // index && emit('update:precision', STACK[index + 1][0])
-      index > -1 && emit('update:precision', props.originPrecision)
-      // index > -1 && emit('update:precision', 'D')
+      const index = STACK.findIndex(it => it[0] === props.originPrecision)
+      // TODO 现不支持倒序使用
+      index > -1 && emit('update:precision', index > 2 ? 'D' : props.originPrecision)
     })
 
-    function changeMode () {
-      const index = STACK.findIndex(it => it[0] === props.precision)
-      index && emit('update:precision', STACK[index - 1][0])
+    function changeMode (head) {
+      let index = STACK.findIndex(it => it[0] === props.precision)
+      if (head === 2 && index > head || head === 3 && index < head) {
+        index = head
+      }
+      else {
+        index = head > 2 ? index + 1 : index - 1
+      }
+
+      index > -1 && index < STACK.length && index < STACK.length && emit('update:precision', STACK[index][0])
     }
 
     const useTurnPageState = inject('useTurnPageState')
@@ -72,8 +80,22 @@ export default {
       emit('update:value', STACK[index - 1][3](props.value, num))
     })
 
+    const refTime = computed(() => {
+      const index = STACK.findIndex(it => it[0] === props.originPrecision)
+      let arr = []
+      if (index) {
+        let i = 3
+        while (index >= i) {
+          arr.push([`${String(STACK[i][2](props.value) + (STACK[i][0] === 'M' ? 1 : 0)).padStart(2, '0')} ${STACK[i][1]} `, STACK[i][0]])
+          i++
+        }
+      }
+      return arr
+    })
+
     const refContent = computed(() => {
-      const index = STACK.findIndex(it => it[0] === props.precision)
+      let index = STACK.findIndex(it => it[0] === props.precision)
+      index = index >= 2 ? 2 : index
       let str = ''
       if (index) {
         let i = 0
@@ -92,6 +114,7 @@ export default {
     return {
       STACK,
       refContent,
+      refTime,
 
       changeMode,
     }
