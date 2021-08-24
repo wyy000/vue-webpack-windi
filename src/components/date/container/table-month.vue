@@ -1,5 +1,5 @@
 <template lang="pug">
-button(v-for="(_, i) of 16" :class="['flex-grow p-4 cursor-pointer border border-white hover:border-fuchsia-500', {'text-fuchsia-500': getMonth(viewValue) === i}]" style="flex-basis: 25%;" @click="clickHandle(i)") {{i % 12 + 1}}月
+button(v-for="(_, i) of 16" :class="['flex-grow p-4 cursor-pointer border border-white hover:border-fuchsia-500', {'text-fuchsia-500': getMonth(viewValue) === i}, i > 11 ? 'text-blue-gray-500' : 'text-blue-gray-900']" style="flex-basis: 25%;" @click="clickHandle(i)") {{i % 12 + 1}}月
 </template>
 
 <script setup>

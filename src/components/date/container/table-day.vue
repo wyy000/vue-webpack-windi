@@ -1,16 +1,16 @@
 <template lang="pug">
 button(v-for="it of week" class="flex-grow flex-shrink-0 p-4 cursor-pointer" style="flex-basis: 14%;") {{it}}
 button(
-  v-for="(_, i) of 42"
-  class="flex-grow flex-shrink-0 p-4 text-blue-gray-900 cursor-pointer border border-white hover:border-fuchsia-500 hover:text-fuchsia-500"
+  v-for="it of refDays"
+  :class="['flex-grow flex-shrink-0 p-4 cursor-pointer border border-white hover:border-fuchsia-500 hover:text-fuchsia-500', textStyle(it)]"
   style="flex-basis: 14%;"
-  @click="clickHandle(i)"
-) {{getDate(addDays(refContent, i))}}
+  @click="clickHandle(it)"
+) {{getDate(it)}}
 </template>
 
 <script setup>
 import {computed, inject, toRefs, watch} from 'vue'
-import {addDays, getDate, getDay, getMonth, getYear, setDate, startOfMonth} from 'date-fns'
+import {addDays, getDate, getDay, getMonth, getYear, isSameDay, isSameMonth, isSameYear, setDate, startOfMonth} from 'date-fns'
 
 const {viewValue, addCount} = toRefs(inject('useDateState'))
 
@@ -24,9 +24,18 @@ watch(() => viewValue.value, value => {
 })
 
 const refContent = computed(() => addDays(startOfMonth(viewValue.value), -getDay(startOfMonth(viewValue.value)) % 7))
+const refDays = computed(() => Array.from({length: 42}).map((_, i) => addDays(refContent.value, i)))
+
+function textStyle (day) {
+  return isSameYear(viewValue.value, day) && isSameMonth(viewValue.value, day)
+    ? isSameDay(viewValue.value, day)
+      ? 'text-fuchsia-500'
+      : 'text-blue-gray-900'
+    : 'text-blue-gray-500'
+}
 
 function clickHandle (day) {
-  viewValue.value = setDate(viewValue.value, getDate(addDays(refContent.value, day)))
+  viewValue.value = setDate(viewValue.value, getDate(day))
   addCount.value()
 }
 </script>
