@@ -1,6 +1,6 @@
 <template lang="pug">
 div(v-show="expanded" class="absolute left-1/2 -translate-x-1/2 w-3/5 overflow-hidden transform transition-all duration-300 ease-in-out")
-  div(class="mx-auto p-0.5 shadow-md bg-white flex flex-wrap rounded-sm transition-all ease-in-out duration-250 transform hover:translate-y-[3px] hover:shadow-lg")
+  div(class="mx-auto p-0.5 shadow-md bg-white flex flex-wrap rounded-sm transition-all ease-in-out duration-250 transform hover:translate-y-[3px] hover:shadow-lg" @click="expanded = false")
     router-link(v-for="it of level" :to="it.path" class="flex-grow flex-shrink-0 flex-nowrap text-[#24292e] text-base rounded-sm background-opacity-50 m-0.5 py-4 px-10 border" :style="it.style") {{it.name}}
   div(class="w-12 h-10 mb-4 shadow-md mx-auto flex justify-center items-center" style="border-bottom-left-radius: 100%; border-bottom-right-radius: 100%")
     svg(viewBox="0 0 24 24" width="20" height="20" class="text-[#24292e] cursor-pointer" @click="expanded = !expanded")
