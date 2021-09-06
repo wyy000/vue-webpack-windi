@@ -7,14 +7,19 @@ div(v-if="showList" class="flex flex-col")
       input(v-model="it.name" class="border")
       button(@click="updateShop(it)") 修改
       button(@click="fetchDeleteShop(it.id)") 删除
+div(class="flex justify-center")
+  input(v-model="value" class="border")
+  button(@click="fetchCreateShop({name: value})") 创建
 </template>
 
 <script setup>
-import {computed} from 'vue'
-import {list, fetchList, updateShop as fetchUpdateShop, deleteShop as fetchDeleteShop} from '../../model/app'
+import {computed, ref} from 'vue'
+import {list, fetchList, updateShop as fetchUpdateShop, deleteShop as fetchDeleteShop, createShop as fetchCreateShop} from '../../model/app'
 
 const refList = computed(() => list.value)
 const showList = computed(() => !!list.value.length)
+
+const value = ref('')
 
 async function updateShop (params) {
   await fetchUpdateShop(params)

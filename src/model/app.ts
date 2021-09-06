@@ -65,3 +65,20 @@ export async function deleteShop (id: string): Promise<boolean> {
 
   return true
 }
+
+export async function createShop (params: {[key: string]: string}): Promise<Shop> {
+  const res = await fetch('/api/shop', {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+    body: JSON.stringify(params),
+  })
+  const {code, data, message} = await res.json() as Response
+  if (code === SUCCESS_CODE) {
+    list.value.push(data)
+  }
+  else throw Error(`response error: error code is ${code}, ${message}`)
+
+  return data
+}
