@@ -1,6 +1,6 @@
 import {defineConfig} from 'windicss/helpers'
-import colors from 'windicss/colors'
-import plugin from 'windicss/plugin'
+// import colors from 'windicss/colors'
+// import plugin from 'windicss/plugin'
 
 export default defineConfig({
   extract: {
@@ -15,7 +15,7 @@ export default defineConfig({
   },
   theme: {
     extend: {
-      colors,
+      // colors,
       gridTemplateColumns: {
         7: 'repeat(7, minmax(0, 1fr))',
       },
